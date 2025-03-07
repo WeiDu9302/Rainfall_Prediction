@@ -24,8 +24,6 @@ class DataProcessor:
             group_by="column"  # 不分组，返回单层列
         )
 
-        # 如果依然是多层列，则手动转换
-        # 有些版本的 yfinance 仍可能给你多层结构，需要强制取出
         if isinstance(df.columns, pd.MultiIndex):
             # 如果只下载了一个ticker，那第二层就是 [AAPL, AAPL, ...]
             # 通过 xs() 取出这个 ticker 对应的数据
@@ -34,7 +32,7 @@ class DataProcessor:
             except Exception:
                 pass  # 如果 xs() 失败，可能需要进一步调试
 
-        # 现在应该是单层列了，选取我们需要的列
+        # 现在应该是单层列了，选取需要的列
         # （有些情况列名开头会是大写；核实一下 df.columns)
         df = df[['Open', 'High', 'Low', 'Close', 'Volume']]
 
