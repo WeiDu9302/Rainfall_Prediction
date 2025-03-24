@@ -1,7 +1,0 @@
-torch
-yfinance
-pandas
-numpy
-sklearn
-python-dotenv
-fredapi
