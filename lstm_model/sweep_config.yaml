@@ -1,0 +1,29 @@
+program: lstm_rainfall_prediction_with_WandB.py
+method: random
+metric:
+  name: val_auc
+  goal: maximize
+
+parameters:
+  epochs:
+    value: 50
+  batch_size:
+    values: [64, 128, 256]
+  learning_rate:
+    distribution: log_uniform
+    min: -7.6  # ~2.5e-4
+    max: -6.2  # ~7.5e-4
+  lstm_units1:
+    values: [64, 128]
+  lstm_units2:
+    values: [32, 64]
+  dropout1:
+    values: [0.2, 0.3, 0.4]
+  dropout2:
+    values: [0.2, 0.3]
+  l2_reg:
+    values: [0.0001, 0.00005]
+  threshold:
+    distribution: uniform
+    min: 0.3
+    max: 0.5
