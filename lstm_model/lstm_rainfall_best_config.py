@@ -1,14 +1,13 @@
-# === 修改说明 ===
-# ✅ 新增 WandB run 命名方式，展示每次 sweep 的关键参数
-# ✅ sweep 参数中新增 "threshold" （分类阈值）支持
-# ✅ 其余结构保持不变
+# ===  ===
+#   WandB run  sweep 
+#  sweep  "threshold" 
+#  
 
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import seaborn as sns
-import wandb
 import yaml
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import LSTM, Dense, Dropout, Bidirectional, BatchNormalization, LayerNormalization
@@ -20,7 +19,6 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.utils.class_weight import compute_class_weight
 from sklearn.metrics import confusion_matrix, classification_report, roc_auc_score
 from sklearn.model_selection import train_test_split
-from wandb.integration.keras import WandbCallback
 from sklearn.metrics import accuracy_score
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
@@ -29,6 +27,10 @@ if gpus:
             tf.config.experimental.set_memory_growth(gpu, True)
     except RuntimeError as e:
         print(e)
+
+
+import os
+os.makedirs("result", exist_ok=True)
 
 # ========== Data Preprocessing ==========
 def load_and_preprocess():
@@ -118,14 +120,23 @@ def build_model(input_shape, config):
     outputs = Dense(1, activation='sigmoid')(x)
     return Model(inputs, outputs)
 
+
+class Config:
+    batch_size = 128
+    dropout1 = 0.2
+    dropout2 = 0.4
+    l2_reg = 5e-05
+    learning_rate = 0.0006561964801432853
+    lstm_units1 = 128
+    lstm_units2 = 32
+    threshold = 0.4803189173327605
+
 # ========== Training Function ==========
 def train():
-    wandb.init(project="LSTM-Rainfall-Prediction")
-    config = wandb.config
+    config = Config()
 
-    # 添加 run 命名：根据 sweep 的参数
-    wandb.run.name = f"lr={config.learning_rate}_bs={config.batch_size}_units={config.lstm_units1}-{config.lstm_units2}_drop={config.dropout1}-{config.dropout2}_th={config.threshold}"
-
+    #  run  sweep 
+    
     model = build_model((X_train.shape[1], X_train.shape[2]), config)
     model.compile(
         optimizer=Adam(config.learning_rate),
@@ -137,7 +148,7 @@ def train():
         EarlyStopping(monitor='val_auc', patience=7, restore_best_weights=True),
         ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, min_lr=1e-6),
         ModelCheckpoint('best_model.h5', save_best_only=True),
-        WandbCallback()
+        
     ]
 
     model.fit(
@@ -151,19 +162,43 @@ def train():
     )
 
     model.load_weights('best_model.h5')
+
+    # Predict probabilities
+    y_prob = model.predict(X_test).flatten()
+    y_pred = (y_prob >= config.threshold).astype(int)
+
+    # Print evaluation metrics
+    print("Classification Report:")
+    print(classification_report(y_test, y_pred, target_names=["No Rain", "Rain"]))
+    print("ROC AUC Score:", roc_auc_score(y_test, y_prob))
+    print("Accuracy Score:", accuracy_score(y_test, y_pred))
+
+    # ROC Curve
+    from sklearn.metrics import roc_curve
+    fpr, tpr, _ = roc_curve(y_test, y_prob)
+    plt.figure()
+    plt.plot(fpr, tpr, label='ROC curve (area = {:.2f})'.format(roc_auc_score(y_test, y_prob)))
+    plt.plot([0, 1], [0, 1], 'k--')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve')
+    plt.legend(loc="lower right")
+    plt.savefig("result/roc_curve.png")
+    plt.close()
+
+    # Confusion Matrix
+    cm = confusion_matrix(y_test, y_pred)
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=["No Rain", "Rain"], yticklabels=["No Rain", "Rain"])
+    plt.xlabel('Predicted Label')
+    plt.ylabel('True Label')
+    plt.title('Confusion Matrix')
+    plt.savefig("result/confusion_matrix.png")
+    plt.close()
+
     y_pred = (model.predict(X_test) >= config.threshold).astype(int).flatten()
 
-    wandb.log({
-        "test_auc": roc_auc_score(y_test, y_pred),
-        "test_accuracy": accuracy_score(y_test, y_pred),
-        "confusion_matrix": wandb.plot.confusion_matrix(
-            y_true=y_test, preds=y_pred, class_names=["No Rain", "Rain"]
-        )
-    })
+    
 
 # ========== Main Entry ==========
-if __name__ == "__main__":
-    with open("sweep_config8.yaml") as f:
-        sweep_config = yaml.safe_load(f)
-    sweep_id = wandb.sweep(sweep_config, project="LSTM-Rainfall-Prediction")
-    wandb.agent(sweep_id, function=train, count=50)
+train()
