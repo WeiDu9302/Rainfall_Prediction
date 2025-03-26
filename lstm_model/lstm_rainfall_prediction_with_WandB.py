@@ -1,7 +1,11 @@
-# === 修改说明 ===
-# ✅ 新增 WandB run 命名方式，展示每次 sweep 的关键参数
-# ✅ sweep 参数中新增 "threshold" （分类阈值）支持
-# ✅ 其余结构保持不变
+"""
+Filename: lstm_rainfall_prediction_with_WandB.py.py
+
+Description: LSTM-based rainfall prediction model with WandB sweep support and simplified feature engineering.
+
+Author: Wei Du
+Created: March 16, 2025
+"""
 
 import numpy as np
 import pandas as pd
@@ -32,47 +36,59 @@ if gpus:
 
 # ========== Data Preprocessing ==========
 def load_and_preprocess():
+    # Load the dataset
     df = pd.read_csv("weather_data.csv")
+
+    # Parse date and extract time features
     df["Date"] = pd.to_datetime(df["Date"])
     df["Year"] = df["Date"].dt.year
     df["Month"] = df["Date"].dt.month
     df["Day"] = df["Date"].dt.day
-    df.drop(columns=["Date", "RainToday", "RainTomorrow"], inplace=True)
+    df.drop(columns=["Date"], inplace=True)
 
+    # Drop target leakage columns
+    df.drop(columns=["RainToday", "RainTomorrow"], inplace=True)
+
+    # Convert wind direction strings into angles (in degrees)
     def wind_direction_to_angle(direction):
         directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
                       'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']
         return directions.index(direction) * (360 / len(directions)) if direction in directions else np.nan
 
+    # Encode wind direction to sin/cos
     for col in ["WindGustDir", "WindDir9am", "WindDir3pm"]:
         df[col] = df[col].map(lambda x: wind_direction_to_angle(x) if isinstance(x, str) else 0)
         df[col + "_sin"] = np.sin(np.radians(df[col]))
         df[col + "_cos"] = np.cos(np.radians(df[col]))
 
-    df["ThermalStress"] = df["MaxTemp"] * df["Humidity3pm"] / 100
-    df["WindEnergy"] = df["WindGustSpeed"] ** 2 * df["WindSpeed3pm"]
-    df["PressureGradient"] = abs(df["Pressure3pm"] - df["Pressure9am"])
-    df["WindSynergy"] = (
-        df["WindGustDir_sin"] * df["WindDir9am_sin"] +
-        df["WindGustDir_cos"] * df["WindDir9am_cos"] +
-        df["WindDir3pm_sin"] * df["WindGustDir_sin"] +
-        df["WindDir3pm_cos"] * df["WindGustDir_cos"]
-    )
-    df["SeasonalFactor"] = np.sin(2 * np.pi * df["Month"] / 12)
+    # Drop original wind direction columns
+    df.drop(columns=["WindGustDir", "WindDir9am", "WindDir3pm"], inplace=True)
 
-    high_corr_features = ["MinTemp", "MaxTemp", "WindSpeed9am", "WindSpeed3pm",
-                          "WindDir9am_sin", "WindDir3pm_sin", "WindDir9am_cos", "WindDir3pm_cos",
-                          "Temp9am", "Temp3pm", "Pressure9am", "Cloud9am", "Year", "Month", "Day"]
+    # Merge related features into average representations
+    df["AvgTemp"] = (df["MinTemp"] + df["MaxTemp"]) / 2
+    df["AvgWindSpeed"] = (df["WindSpeed9am"] + df["WindSpeed3pm"]) / 2
+    df["WindDir_sin"] = (df["WindDir9am_sin"] + df["WindDir3pm_sin"]) / 2
+    df["WindDir_cos"] = (df["WindDir9am_cos"] + df["WindDir3pm_cos"]) / 2
+
+    # Drop redundant or highly correlated features
+    high_corr_features = [
+        "MinTemp", "MaxTemp", "WindSpeed9am", "WindSpeed3pm",
+        "WindDir9am_sin", "WindDir3pm_sin", "WindDir9am_cos", "WindDir3pm_cos",
+        "Temp9am", "Temp3pm", "Pressure9am", "Cloud9am", "Year", "Month", "Day"
+    ]
     df.drop(columns=high_corr_features, inplace=True)
 
+    # Fill missing values
     df.fillna(df.mean(), inplace=True)
     df.fillna(0, inplace=True)
     df = df.astype(float)
 
+    # Create binary rainfall target
     df["RainBinary"] = df["Rainfall"].apply(lambda x: 1 if x > 0 else 0)
     df.drop(columns=["Rainfall"], inplace=True)
 
     return df
+
 
 # ========== Data Preparation ==========
 df = load_and_preprocess()
