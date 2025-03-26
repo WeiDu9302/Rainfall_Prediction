@@ -1,8 +1,3 @@
-# ===  ===
-#   WandB run  sweep 
-#  sweep  "threshold" 
-#  
-
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -19,7 +14,10 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.utils.class_weight import compute_class_weight
 from sklearn.metrics import confusion_matrix, classification_report, roc_auc_score
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, roc_curve
+import joblib
+
+
 gpus = tf.config.experimental.list_physical_devices('GPU')
 if gpus:
     try:
@@ -27,9 +25,8 @@ if gpus:
             tf.config.experimental.set_memory_growth(gpu, True)
     except RuntimeError as e:
         print(e)
-
-
 import os
+
 os.makedirs("result", exist_ok=True)
 
 # ========== Data Preprocessing ==========
@@ -86,6 +83,7 @@ scaler_X = MinMaxScaler()
 train_scaled = scaler_X.fit_transform(train_df[features])
 test_scaled = scaler_X.transform(test_df[features])
 val_scaled = scaler_X.transform(val_df[features])
+joblib.dump(scaler_X, 'scaler_X.save')
 
 def createXY(X, y, n_past=5):
     X_data, y_data = [], []
@@ -135,7 +133,6 @@ class Config:
 def train():
     config = Config()
 
-    #  run  sweep 
     
     model = build_model((X_train.shape[1], X_train.shape[2]), config)
     model.compile(
@@ -174,7 +171,6 @@ def train():
     print("Accuracy Score:", accuracy_score(y_test, y_pred))
 
     # ROC Curve
-    from sklearn.metrics import roc_curve
     fpr, tpr, _ = roc_curve(y_test, y_prob)
     plt.figure()
     plt.plot(fpr, tpr, label='ROC curve (area = {:.2f})'.format(roc_auc_score(y_test, y_prob)))
