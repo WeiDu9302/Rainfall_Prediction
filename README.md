@@ -8,27 +8,28 @@ The Oracle predicts future rainfall based on historical weather data and is acce
 
 Rainfall_Prediction/
 |
-├── lstm_model/                     
-│   ├── EDA.ipynb                           # Exploratory data analysis
-│   ├── lstm_rainfall_best_config.py       # Final LSTM with best config
+├── lstm_model/                              # Author: Wei Du
+│   ├── EDA.ipynb                            # Exploratory data analysis
+│   ├── lstm_rainfall_best_config.py         # Final LSTM with best config
 │   ├── lstm_rainfall_prediction_with_WandB.py  # Training with WandB tuning
-│   ├── sweep_config.yaml                  # WandB hyperparameter sweep setup
-│   └── weather_data.csv                   # Raw weather dataset
-│
-├── Example_Predict/               
-│   ├── predict.py                         # Script for loading model and predicting
-│   ├── rain_prediction_lstm.h5           # Trained LSTM model
-│   └── scaler_X.save                     # Scaler for input preprocessing
-├── server-client/                 
-│   ├── client.py                          # Simple terminal client
-│   └── server.py                          # Server hosting the Oracle model
-│
-├── User interface/                
-│   ├── app.py                             # Flask app
-│   └── index.html                         # Web interface template
-│
-│
-└── README.md                              # Project documentation
+│   ├── sweep_config.yaml                    # WandB hyperparameter sweep setup
+│   └── weather_data.csv                     # Raw weather dataset
+|
+├── Example_Predict/                         # Author: Wei Du
+│   ├── predict.py                           # Script for loading model and predicting
+│   ├── rain_prediction_lstm.h5              # Trained LSTM model
+│   └── scaler_X.save                        # Scaler for input preprocessing
+|
+├── server-client/                           # Author: Yuning Zhou
+│   ├── client.py                            # Simple terminal client
+│   └── server.py                            # Server hosting the Oracle model
+|
+├── User interface/                          # Author: Haowen Yang
+│   ├── app.py                               # Flask app
+│   └── index.html                           # Web interface template
+|
+└── README.md                                # Project documentation
+
 
 ## Features
 
@@ -70,14 +71,6 @@ Then open your browser and go to http://127.0.0.1:5000
 - scikit-learn
 - wandb (for hyperparameter tuning)
 - flask (for web interface)
-
-## Author Contribution
-
-- Wei Du:
-  - lstm_model/
-  - Example_Predict/
-
-- [Add teammate names and roles here if needed]
 
 ## License
 
