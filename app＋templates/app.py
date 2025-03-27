@@ -6,7 +6,7 @@ import joblib
 
 app = Flask(__name__)
 
-# 加载模型和scaler
+
 scaler_X = joblib.load('scaler_X.save')
 
 @app.route('/')
@@ -17,10 +17,10 @@ def index():
 def predict():
     data = request.get_json()
     
-    # 将接收的数据转换为DataFrame
+ 
     df = pd.DataFrame(data)
     
-    # 预测
+
     probability = predict_rainfall_past_5_days(
         "rain_prediction_lstm.h5",
         df,
