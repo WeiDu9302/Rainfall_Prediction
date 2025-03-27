@@ -29,7 +29,7 @@ Rainfall_Prediction/
 │   └── index.html                    # Web interface template
 │
 └── README.md                         # Project documentation
-
+```
 
 
 ## Features
