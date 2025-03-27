@@ -1,4 +1,4 @@
-program: lstm_rainfall8.py
+program: lstm_rainfall_prediction_with_WandB.py
 method: random
 metric:
   name: val_accuracy
