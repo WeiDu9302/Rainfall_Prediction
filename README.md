@@ -41,27 +41,88 @@ Rainfall_Prediction/
 
 ## How to Run
 
+This section describes how to train the model, run predictions, and interact with the Oracle via both terminal and web interfaces.
+
 ### 1. Train the model
 
-Navigate to the lstm_model folder and run:
+Navigate to the `lstm_model` folder and run:
 
-### 2. Predict using saved model
+```bash
+cd lstm_model
+python lstm_rainfall_prediction_with_WandB.py
+```
 
-Navigate to the Example_Predict folder and run:
+This script performs:
+- Data preprocessing and feature engineering
+- LSTM model training
+- Hyperparameter tuning using Weights & Biases (WandB)
+- Saving the trained model (`rain_prediction_lstm.h5`) and scaler (`scaler_X.save`)
 
+---
 
-### 3. Start the Oracle chatbot (client-server)
+### 2. Predict using the saved model
 
-In one terminal (server side):
+Navigate to the `Example_Predict` folder and run:
 
+```bash
+cd Example_Predict
+python predict.py
+```
 
-In another terminal (client side):
+This script loads the saved model and scaler, accepts user input, and makes a rainfall prediction.
 
+---
+
+### 3. Start the Oracle chatbot (terminal client-server interface)
+
+Open **two separate terminals**.
+
+**Terminal 1: Start the server**
+
+```bash
+cd server-client
+python server.py
+```
+
+**Terminal 2: Start the client**
+
+```bash
+cd server-client
+python client.py
+```
+
+You will see a prompt like:
+
+```
+Hello, I’m the Oracle. How can I help you today?
+```
+
+Type supported sentences like:
+
+```
+Can you give me the rainfall prediction for tomorrow?
+```
+
+The server will respond with a forecast based on the LSTM model.
+
+---
 
 ### 4. (Optional) Launch the web interface
 
+Navigate to the `user_interface` folder and run:
 
-Then open your browser and go to http://127.0.0.1:5000
+```bash
+cd user_interface
+python app.py
+```
+
+Then open your browser and go to:
+
+```
+http://127.0.0.1:5000
+```
+
+Use the web form to submit queries to the Oracle and view predictions in your browser.
 
 ## Requirements
 
