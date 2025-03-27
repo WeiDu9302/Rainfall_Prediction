@@ -1,7 +1,7 @@
 program: lstm_rainfall_prediction_with_WandB.py
 method: random
 metric:
-  name: val_accuracy
+  name: val_auc
   goal: maximize
 
 parameters:
