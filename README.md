@@ -1,5 +1,11 @@
 # Rainfall_Prediction Oracle – SNS Project 2024/2025
 
+**Team Members:**
+- Wei Du
+- Yuning Zhou
+- Haowen Yang
+
+  
 This project implements a time series forecasting Oracle chatbot for rainfall prediction using an LSTM model. It was developed for the UCL Software for Network Services (SNS) module.
 
 The Oracle predicts future rainfall based on historical weather data and is accessed via a simple terminal-based client-server interface.
@@ -107,7 +113,7 @@ The server will respond with a forecast based on the LSTM model.
 
 ---
 
-### 4. (Optional) Launch the web interface
+### 4. Launch the web interface
 
 Navigate to the `user_interface` folder and run:
 
