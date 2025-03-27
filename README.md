@@ -6,29 +6,24 @@ The Oracle predicts future rainfall based on historical weather data and is acce
 
 ## Project Structure
 
-Rainfall_Prediction/
-|
-├── lstm_model/                              # Author: Wei Du
-│   ├── EDA.ipynb                            # Exploratory data analysis
-│   ├── lstm_rainfall_best_config.py         # Final LSTM with best config
-│   ├── lstm_rainfall_prediction_with_WandB.py  # Training with WandB tuning
-│   ├── sweep_config.yaml                    # WandB hyperparameter sweep setup
-│   └── weather_data.csv                     # Raw weather dataset
-|
-├── Example_Predict/                         # Author: Wei Du
-│   ├── predict.py                           # Script for loading model and predicting
-│   ├── rain_prediction_lstm.h5              # Trained LSTM model
-│   └── scaler_X.save                        # Scaler for input preprocessing
-|
-├── server-client/                           # Author: Yuning Zhou
-│   ├── client.py                            # Simple terminal client
-│   └── server.py                            # Server hosting the Oracle model
-|
-├── User interface/                          # Author: Haowen Yang
-│   ├── app.py                               # Flask app
-│   └── index.html                           # Web interface template
-|
-└── README.md                                # Project documentation
+Rainfall_Prediction/  
+├── lstm_model/                              # Author: Wei Du  
+│   ├── EDA.ipynb                            # Exploratory data analysis  
+│   ├── lstm_rainfall_best_config.py         # Final LSTM with best config  
+│   ├── lstm_rainfall_prediction_with_WandB.py  # Training with WandB tuning  
+│   ├── sweep_config.yaml                    # WandB hyperparameter sweep setup  
+│   └── weather_data.csv                     # Raw weather dataset  
+├── Example_Predict/                         # Author: Wei Du  
+│   ├── predict.py                           # Script for loading model and predicting  
+│   ├── rain_prediction_lstm.h5              # Trained LSTM model  
+│   └── scaler_X.save                        # Scaler for input preprocessing  
+├── server-client/                           # Author: Yuning Zhou  
+│   ├── client.py                            # Simple terminal client  
+│   └── server.py                            # Server hosting the Oracle model  
+├── User interface/                          # Author: Haowen Yang  
+│   ├── app.py                               # Flask app  
+│   └── index.html                           # Web interface template  
+└── README.md                                # Project documentation  
 
 
 ## Features
