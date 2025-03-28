@@ -177,12 +177,6 @@ This interface allows intuitive communication while abstracting away technical c
 - wandb (for hyperparameter tuning)
 - flask (for web interface)
 
-Install all dependencies via:
-
-```bash
-pip install -r requirements.txt
-```
-
 ---
 
 ## License
