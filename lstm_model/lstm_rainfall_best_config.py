@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Filename: lstm_rainfall_best_config.py
 
