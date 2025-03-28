@@ -8,6 +8,8 @@
 This project implements a time series forecasting Oracle chatbot for rainfall prediction using an LSTM model. It was developed for the UCL Software for Network Services (SNS) module.
 
 The Oracle predicts future rainfall based on historical weather data and is accessed via a simple terminal-based client-server interface.
+Users input 14 key weather features from the past 5 days. After preprocessing, the data is passed through the model to estimate the likelihood of rain the next day.
+
 
 ---
 
