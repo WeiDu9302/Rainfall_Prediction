@@ -6,6 +6,7 @@
 - Haowen Yang
 
   
+
 This project implements a time series forecasting Oracle chatbot for rainfall prediction using an LSTM model. It was developed for the UCL Software for Network Services (SNS) module.
 
 The Oracle predicts future rainfall based on historical weather data and is accessed via a simple terminal-based client-server interface.
@@ -109,19 +110,22 @@ Type supported sentences like:
 Can you give me the rainfall prediction for tomorrow?
 ```
 
-The server will respond with a forecast based on the LSTM model.
 
-<img width="576" alt="1" src="https://github.com/user-attachments/assets/04ba3eb5-5de3-4b24-bf96-953d24f07f0e" />
+---
 
+### Example
 
-In this screenshot, the user uses predefined weather data for five consecutive days. The chatbot performs validation, applies default values where necessary, and confirms the input before sending it to the server. The predicted probability of rain for the next day is then displayed in a clean and structured format.
+**Figure 1: Flask server running successfully**  
+The server loads the trained LSTM model and MinMaxScaler, binds to `http://127.0.0.1:5000`, and is ready to receive prediction requests from the client.  
+![1](E:\24UCL_term2\SNS\AAArainfall\pic\1.png)
 
-<img width="576" alt="2" src="https://github.com/user-attachments/assets/5fb896ad-6f15-4ddf-9540-7acf4715a55d" />
+**Figure 2: Client-side input and rainfall prediction**  
+The client script collects 5 days of weather data from user input, sends it to the server, and receives a predicted probability of rainfall for the next day (e.g., 94.58%).  
+![2](E:\24UCL_term2\SNS\AAArainfall\pic\2.png)
 
-
-This screenshot shows the server receiving a POST request from the client and printing the raw input data in tabular form. It then applies feature engineering and normalization before reshaping the data into the format required by the LSTM model. Finally, the model generates a prediction, which is sent back to the client.
-
-
+**Figure 3: Server processing and model inference**  
+The server prints the received JSON data, processes and scales the input, feeds it into the LSTM model, and outputs the final prediction.  
+![3](E:\24UCL_term2\SNS\AAArainfall\pic\3.png)
 
 ---
 
@@ -142,6 +146,23 @@ http://127.0.0.1:5000
 
 Use the web form to submit queries to the Oracle and view predictions in your browser.
 
+\---
+
+**###** **Example**
+
+**Figure 4: Rainfall Oracle Web Interface**
+ The user interacts with a chatbot-like interface. Upon asking a question (e.g., *"Can you tell me if it will rain tomorrow?"*), the Oracle prompts the user to input key climate features from the past five days. These features—such as temperature, rainfall, evaporation, sunshine, and wind conditions—can be filled in using an interactive table.
+
+Once submitted, the backend processes the data and returns a predicted probability of rainfall for the next day. In this example, the system outputs:
+
+> *“The probability of rain tomorrow is: 95.92%”*
+
+This interface allows intuitive communication while abstracting away technical complexity, making the model accessible to non-expert users.
+
+![user-interface](E:\24UCL_term2\SNS\AAArainfall\pic\user-interface.png)
+
+\---
+
 ## Requirements
 
 - Python 3.x
@@ -155,5 +176,4 @@ Use the web form to submit queries to the Oracle and view predictions in your br
 ## License
 
 This project is developed for educational purposes as part of the SNS coursework at UCL. Not intended for commercial use.
-
 
