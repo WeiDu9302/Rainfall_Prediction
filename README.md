@@ -30,8 +30,8 @@ Rainfall_Prediction/
 │   └── scaler_X.save                  # Scaler for input preprocessing
 │
 ├── server-client/                      [ AUTHOR: Yuning Zhou ]
-│   ├── client.py                      # Simple terminal client
-│   └── server.py                      # Server hosting the Oracle model
+│   ├── client_rain.py                      # Simple terminal client
+│   └── server_rain.py                      # Server hosting the Oracle model
 │
 ├── user_interface/                     [ AUTHOR: Haowen Yang ]
 │   ├── app.py                         # Flask app
