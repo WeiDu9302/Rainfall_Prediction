@@ -1,5 +1,5 @@
 """
-Filename: lstm_rainfall_prediction_with_WandB.py.py
+Filename: lstm_rainfall_prediction_with_WandB.py
 
 Description: LSTM-based rainfall prediction model with WandB sweep support and simplified feature engineering.
 
