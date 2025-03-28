@@ -5,11 +5,11 @@
 - Yuning Zhou
 - Haowen Yang
 
-  
-
 This project implements a time series forecasting Oracle chatbot for rainfall prediction using an LSTM model. It was developed for the UCL Software for Network Services (SNS) module.
 
 The Oracle predicts future rainfall based on historical weather data and is accessed via a simple terminal-based client-server interface.
+
+---
 
 ## Project Structure
 
@@ -38,6 +38,7 @@ Rainfall_Prediction/
 └── README.md                           # Project documentation
 ```
 
+---
 
 ## Features
 
@@ -45,6 +46,8 @@ Rainfall_Prediction/
 - Model tuning using Weights & Biases (WandB)
 - Command-line based Oracle chatbot (client-server architecture)
 - Optional web interface built with Flask
+
+---
 
 ## How to Run
 
@@ -110,22 +113,23 @@ Type supported sentences like:
 Can you give me the rainfall prediction for tomorrow?
 ```
 
+The server will respond with a forecast based on the LSTM model.
 
 ---
 
-### Example
+### Example Results from the Server-Client Interface
 
 **Figure 1: Flask server running successfully**  
 The server loads the trained LSTM model and MinMaxScaler, binds to `http://127.0.0.1:5000`, and is ready to receive prediction requests from the client.  
-![1](E:\24UCL_term2\SNS\AAArainfall\pic\1.png)
+![Server Running](./1.png)
 
 **Figure 2: Client-side input and rainfall prediction**  
 The client script collects 5 days of weather data from user input, sends it to the server, and receives a predicted probability of rainfall for the next day (e.g., 94.58%).  
-![2](E:\24UCL_term2\SNS\AAArainfall\pic\2.png)
+![Client Prediction](./2.png)
 
 **Figure 3: Server processing and model inference**  
 The server prints the received JSON data, processes and scales the input, feeds it into the LSTM model, and outputs the final prediction.  
-![3](E:\24UCL_term2\SNS\AAArainfall\pic\3.png)
+![Server Inference](./3.png)
 
 ---
 
@@ -143,25 +147,23 @@ Then open your browser and go to:
 ```
 http://127.0.0.1:5000
 ```
-
 Use the web form to submit queries to the Oracle and view predictions in your browser.
 
-\---
+---
 
-**###** **Example**
+### Example Output from the Web-based Oracle Interface
 
-**Figure 4: Rainfall Oracle Web Interface**
- The user interacts with a chatbot-like interface. Upon asking a question (e.g., *"Can you tell me if it will rain tomorrow?"*), the Oracle prompts the user to input key climate features from the past five days. These features—such as temperature, rainfall, evaporation, sunshine, and wind conditions—can be filled in using an interactive table.
+**Figure 4: Rainfall Oracle Web Interface**  
+The user interacts with a chatbot-like interface. Upon asking a natural language question (e.g., "Can you tell me if it will rain tomorrow?"), the Oracle prompts the user to input key climate features from the past five days. These features—such as temperature, rainfall, evaporation, sunshine, and wind conditions—can be filled in using an interactive table.
 
-Once submitted, the backend processes the data and returns a predicted probability of rainfall for the next day. In this example, the system outputs:
-
-> *“The probability of rain tomorrow is: 95.92%”*
+Once submitted, the backend processes the data and returns a predicted probability of rainfall for the next day. In this example, the system outputs:  
+> “The probability of rain tomorrow is: 95.92%”
 
 This interface allows intuitive communication while abstracting away technical complexity, making the model accessible to non-expert users.
 
-![user-interface](E:\24UCL_term2\SNS\AAArainfall\pic\user-interface.png)
+![user-interface](./user-interface.png)
 
-\---
+---
 
 ## Requirements
 
@@ -173,7 +175,14 @@ This interface allows intuitive communication while abstracting away technical c
 - wandb (for hyperparameter tuning)
 - flask (for web interface)
 
+Install all dependencies via:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
 ## License
 
 This project is developed for educational purposes as part of the SNS coursework at UCL. Not intended for commercial use.
-
