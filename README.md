@@ -111,6 +111,18 @@ Can you give me the rainfall prediction for tomorrow?
 
 The server will respond with a forecast based on the LSTM model.
 
+<img width="576" alt="1" src="https://github.com/user-attachments/assets/04ba3eb5-5de3-4b24-bf96-953d24f07f0e" />
+
+
+In this screenshot, the user uses predefined weather data for five consecutive days. The chatbot performs validation, applies default values where necessary, and confirms the input before sending it to the server. The predicted probability of rain for the next day is then displayed in a clean and structured format.
+
+<img width="576" alt="2" src="https://github.com/user-attachments/assets/5fb896ad-6f15-4ddf-9540-7acf4715a55d" />
+
+
+This screenshot shows the server receiving a POST request from the client and printing the raw input data in tabular form. It then applies feature engineering and normalization before reshaping the data into the format required by the LSTM model. Finally, the model generates a prediction, which is sent back to the client.
+
+
+
 ---
 
 ### 4. Launch the web interface
